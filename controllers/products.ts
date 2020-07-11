@@ -72,8 +72,34 @@ const addProduct = async ({ request, response }: { request: any, response: any }
     }
 }
 
+// update a product
+const updateProduct = async ({ params, request, response }: { params: { id: string }, request: any, response: any }) => {
+    const product: Products | undefined = products.find(items => items.id === params.id)
+
+    if (product) {
+        const data = await request.body()
+
+        const updateData: { name?:string, description?:string, price?:number } = data.value
+
+        products = products.map(items => items.id === params.id ? { ...items, ...updateData } : items)
+
+        response.status = 200
+        response.body = {
+            success: true,
+            data: products
+        }
+    } else {
+        response.status = 404
+        response.body = {
+            success: false,
+            data: 'No data found'
+        }
+    }
+}
+
 export { 
     getProducts, 
     getProduct,
     addProduct,
+    updateProduct
 }
