@@ -28,4 +28,22 @@ const getProducts = ({ response }: { response: any }) => {
     }
 }
 
-export { getProducts }
+const getProduct = ({ params, response }: { params: { id: string }, response: any }) => {
+    const product: Products | undefined = products.find(items => items.id === params.id)
+
+    if (product) {
+        response.status = 200
+        response.body = {
+            success: true,
+            data: product
+        }
+    } else {
+        response.status = 404
+        response.body = {
+            success: false,
+            message: 'No product found'
+        }
+    }
+}
+
+export { getProducts, getProduct }
